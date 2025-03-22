@@ -82,35 +82,70 @@ namespace AdvancedREPO.Stamina.Patches
         /// <returns>The recharge rate</returns>
         public static float GetStaminaRechargeRate(PlayerController playerController)
         {
-            if (playerController.Crouching || playerController.Crawling)
-                return Configuration.StaminaRechargeCrouchingRate.Value / 100f;
             if (playerController.moving)
-                return Configuration.StaminaRechargeRate.Value / 100f;
-            return Configuration.StaminaRechargeStandingRate.Value / 100f;
+            {
+                if (playerController.Crouching || playerController.Crawling)
+                    return Configuration.StaminaRechargeCrouchingRate.Value / 100f;
+                else
+                    return Configuration.StaminaRechargeRate.Value / 100f;
+            }
+            else
+            {
+                if (playerController.Crouching || playerController.Crawling)
+                    return Configuration.StaminaRechargeCrouchingStillRate.Value / 100f;
+                else
+                    return Configuration.StaminaRechargeStandingRate.Value / 100f;
+            }
         }
 
+        /// <summary>
+        /// Returns if the player has enough stamina to sprint (will return true if jumping and no slowdown during jump is active)
+        /// </summary>
+        /// <param name="playerController">The PlayerController</param>
+        /// <returns>Whether sprint speed should be applied to the player</returns>
         public static bool EnoughStaminaForSprint(PlayerController playerController)
         {
             return playerController.EnergyCurrent >= 1f || (Configuration.NoSlowdownDuringJump.Value && (IsJumpingField?.GetValue(playerController) ?? false));
         }
 
+        /// <summary>
+        /// How much to add to the time of the lerp of the sprint speed. If acceleration in jump is deactivated this will return 0.
+        /// </summary>
+        /// <param name="playerController">The PlayerController</param>
+        /// <returns>The value to add to t</returns>
         public static float GetSprintLerpChange(PlayerController playerController)
         {
             return !Configuration.NoAccelerationDuringJump.Value || !IsJumpingField.GetValue(playerController) ? playerController.SprintAcceleration * Time.fixedDeltaTime : 0;
         }
+
+        /// <summary>
+        /// Returns a multiplicator for the stamina drain. If no stamina drain during jumping is active it returns 0.
+        /// </summary>
+        /// <param name="playerController">The PlayerController</param>
+        /// <returns>A multiplicator for stamina drain</returns>
         public static float GetStaminaDrain(PlayerController playerController)
         {
             return Configuration.NoStaminaDrainDuringJump.Value && IsJumpingField.GetValue(playerController) ? 0f : Configuration.StaminaSprintDrainRate.Value / 100f;
         }
 
+        /// <summary>
+        /// Returns how much stamina is the baseline
+        /// </summary>
+        /// <returns>The base stamina</returns>
         public static float GetStartStamina()
         {
             return Configuration.StartingStamina.Value;
         }
+
+        /// <summary>
+        /// Returns how much stamina an upgrade give
+        /// </summary>
+        /// <returns>Stamina per upgrade</returns>
         public static float GetStaminaPerUpgrade()
         {
             return Configuration.StaminaPerUpgrade.Value;
         }
+
         /// <summary>
         /// Patch for the FixedUpdate method of the global::PlayerController.
         /// Will add a call to PlayerControllerPatches::FixedUpdate

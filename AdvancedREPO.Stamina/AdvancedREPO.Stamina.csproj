@@ -17,8 +17,12 @@
 		<OutputPath>../output/AdvancedREPO.Stamina/BepInEx/plugins/</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\AdvancedREPO.Config\AdvancedREPO.Config.csproj" />
-	  <ProjectReference Include="..\AdvancedREPO.Utils\AdvancedREPO.Utils.csproj" />
+	  <ProjectReference Include="..\AdvancedREPO.Config\AdvancedREPO.Config.csproj">
+	    <Private>False</Private>
+	  </ProjectReference>
+	  <ProjectReference Include="..\AdvancedREPO.Utils\AdvancedREPO.Utils.csproj">
+	    <Private>False</Private>
+	  </ProjectReference>
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="BepInEx">

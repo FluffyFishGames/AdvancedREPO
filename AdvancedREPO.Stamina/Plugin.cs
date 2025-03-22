@@ -13,7 +13,7 @@ namespace AdvancedREPO.Stamina
         void Awake()
         {
             Log = base.Logger;
-            Configuration.Initialize();
+            Configuration.Initialize(Config);
             Log.LogInfo("Applying AdvancedREPO.Stamina...");
             PlayerControllerPatches.ApplyPatches();
             PunManagerPatches.ApplyPatches();

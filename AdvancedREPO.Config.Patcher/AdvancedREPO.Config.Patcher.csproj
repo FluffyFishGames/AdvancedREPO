@@ -16,7 +16,9 @@
 		<OutputPath>../output/AdvancedREPO.Config/BepInEx/patchers/</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\AdvancedREPO.Patcher\AdvancedREPO.Patcher.csproj" />
+		<ProjectReference Include="..\AdvancedREPO.Patcher\AdvancedREPO.Patcher.csproj">
+		  <Private>False</Private>
+		</ProjectReference>
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="BepInEx">

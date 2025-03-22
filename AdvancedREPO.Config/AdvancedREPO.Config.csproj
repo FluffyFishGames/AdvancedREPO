@@ -17,7 +17,9 @@
 		<OutputPath>../output/AdvancedREPO.Config/BepInEx/plugins/</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\AdvancedREPO.Utils\AdvancedREPO.Utils.csproj" />
+	  <ProjectReference Include="..\AdvancedREPO.Utils\AdvancedREPO.Utils.csproj">
+	    <Private>False</Private>
+	  </ProjectReference>
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="BepInEx">

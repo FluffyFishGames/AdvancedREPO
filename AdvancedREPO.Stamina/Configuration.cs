@@ -13,29 +13,33 @@ namespace AdvancedREPO.Stamina
         public static ConfigField<bool> NoStaminaDrainDuringJump;
         public static ConfigField<bool> NoSlowdownDuringJump;
         public static ConfigField<bool> NoAccelerationDuringJump;
-        public static ConfigField<float> JumpStaminaCost;
+        public static ConfigField<int> JumpStaminaCost;
         public static ConfigField<bool> JumpStaminaPrevent;
-        public static ConfigField<float> StaminaSprintDrainRate;
-        public static ConfigField<float> StaminaRechargeRate;
-        public static ConfigField<float> StaminaRechargeStandingRate;
-        public static ConfigField<float> StaminaRechargeCrouchingRate;
-        public static ConfigField<float> StartingStamina;
-        public static ConfigField<float> StaminaPerUpgrade;
-        public static void Initialize()
-        {
-            var configFile = new ConfigFile(Path.Combine(Paths.ConfigPath, "AdvancedREPO/AdvancedStamina.cfg"), true);
+        public static ConfigField<int> StaminaSprintDrainRate;
+        public static ConfigField<int> StaminaRechargeRate;
+        public static ConfigField<int> StaminaRechargeStandingRate;
+        public static ConfigField<int> StaminaRechargeCrouchingRate;
+        public static ConfigField<int> StaminaRechargeCrouchingStillRate;
+        public static ConfigField<int> StartingStamina;
+        public static ConfigField<int> StaminaPerUpgrade;
 
-            NoSlowdownDuringJump = configFile.Bind<bool>("Jumping", "No slow down", true, "Do not slow down the player when stamina reaches zero while jumping.").Sync();
-            NoAccelerationDuringJump = configFile.Bind<bool>("Jumping", "No acceleration", true, "Do not accelerate the player when sprint is hold while jumping.").Sync();
-            NoStaminaDrainDuringJump = configFile.Bind<bool>("Jumping", "No stamina drain", true, "Do not drain stamina during jumping.").Sync();
-            JumpStaminaCost = configFile.Bind<float>("Jumping", "Jump stamina cost", 0f, "How much stamina should a jump cost? Zero is the default game behavior.").Sync();
-            JumpStaminaPrevent = configFile.Bind<bool>("Jumping", "Prevent jump", false, "Should a jump be prevented if stamina is insufficient?").Sync();
-            StaminaSprintDrainRate = configFile.Bind<float>("Stamina", "Stamina sprint drain rate", 100f, "How fast should stamina drain while sprinting? 100 is the game default.").Sync();
-            StaminaRechargeRate = configFile.Bind<float>("Stamina", "Stamina standard recharge rate", 100f, "How fast should stamina recharge? 100 is the game default.").Sync();
-            StaminaRechargeStandingRate = configFile.Bind<float>("Stamina", "Stamina recharge rate while standing", 200f, "How fast should stamina recharge while standing still? 100 is the game default.").Sync();
-            StaminaRechargeCrouchingRate = configFile.Bind<float>("Stamina", "Stamina recharge rate while crouching", 150f, "How fast should stamina recharge while crouching? When standing still while crouching the standing recharge rate is used instead. 100 is the game default.").Sync();
-            StartingStamina = configFile.Bind<float>("Stamina", "Starting stamina", 40f, "How much stamina every player should start with.").Sync();
-            StaminaPerUpgrade = configFile.Bind<float>("Stamina", "Upgrade stamina", 10f, "How much stamina every upgrade gives.").Sync();
+        /// <summary>
+        /// Initializes the configuration fields.
+        /// </summary>
+        public static void Initialize(ConfigFile configFile)
+        {
+            NoSlowdownDuringJump = configFile.Bind<bool>(new ConfigDefinition("Jumping", "No slow down"), true, new ConfigDescription("Do not slow down the player when stamina reaches zero while jumping.")).Sync();
+            NoAccelerationDuringJump = configFile.Bind<bool>(new ConfigDefinition("Jumping", "No acceleration"), true, new ConfigDescription("Do not accelerate the player when sprint is hold while jumping.")).Sync();
+            NoStaminaDrainDuringJump = configFile.Bind<bool>(new ConfigDefinition("Jumping", "No stamina drain"), false, new ConfigDescription("Do not drain stamina during jumping.")).Sync();
+            JumpStaminaCost = configFile.Bind<int>(new ConfigDefinition("Jumping", "Jump stamina cost"), 0, new ConfigDescription("How much stamina should a jump cost? Zero is the default game behavior.", new AcceptableValueRange<int>(0, 100))).Sync();
+            JumpStaminaPrevent = configFile.Bind<bool>(new ConfigDefinition("Jumping", "Prevent jump"), false, new ConfigDescription("Should a jump be prevented if stamina is insufficient?")).Sync();
+            StaminaSprintDrainRate = configFile.Bind<int>(new ConfigDefinition("Stamina", "Stamina sprint drain rate"), 100, new ConfigDescription("How fast should stamina drain while sprinting? 100 is the game default.", new AcceptableValueRange<int>(0, 500))).Sync();
+            StaminaRechargeRate = configFile.Bind<int>(new ConfigDefinition("Stamina", "Stamina standard recharge rate"), 100, new ConfigDescription("How fast should stamina recharge? 100 is the game default.", new AcceptableValueRange<int>(0, 1000))).Sync();
+            StaminaRechargeStandingRate = configFile.Bind<int>(new ConfigDefinition("Stamina", "Stamina recharge rate while standing"), 150, new ConfigDescription("How fast should stamina recharge while standing still? 100 is the game default.", new AcceptableValueRange<int>(0, 1000))).Sync();
+            StaminaRechargeCrouchingRate = configFile.Bind<int>(new ConfigDefinition("Stamina", "Stamina recharge rate while crouching"), 150, new ConfigDescription("How fast should stamina recharge while crouching? 100 is the game default.", new AcceptableValueRange<int>(0, 1000))).Sync();
+            StaminaRechargeCrouchingStillRate = configFile.Bind<int>(new ConfigDefinition("Stamina", "Stamina recharge rate while crouching still"), 200, new ConfigDescription("How fast should stamina recharge while crouching and not moving? 100 is the game default.", new AcceptableValueRange<int>(0, 1000))).Sync();
+            StartingStamina = configFile.Bind<int>(new ConfigDefinition("Stamina", "Starting stamina"), 40, new ConfigDescription("How much stamina every player should start with.", new AcceptableValueRange<int>(0, 1000))).Sync();
+            StaminaPerUpgrade = configFile.Bind<int>(new ConfigDefinition("Stamina", "Upgrade stamina"), 10, new ConfigDescription("How much stamina every upgrade gives.", new AcceptableValueRange<int>(0, 100))).Sync();
         }
     }
 }
