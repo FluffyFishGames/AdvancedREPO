@@ -4,11 +4,27 @@ using System.Reflection;
 using System.Linq;
 using System;
 using AdvancedREPO.Utils;
+using UnityEngine;
 
 namespace AdvancedREPO.Config.Patches
 {
     public class PunManagerPatches
     {
+        private static PunManager _Instance;
+        public static PunManager Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                    _Instance = GameObject.FindFirstObjectByType<PunManager>();
+                return _Instance;
+            }
+            set
+            {
+                if (value != null)
+                    _Instance = value;
+            }
+        }
         private static Field<PunManager, PhotonView>? PhotonViewField;
 
         public static void ApplyPatches()
@@ -242,6 +258,7 @@ namespace AdvancedREPO.Config.Patches
         [HarmonyPrefix]
         public static void InitiateSync(PunManager __instance)
         {
+            Instance = __instance;
             if (!SemiFunc.IsMultiplayer() || PhotonNetwork.IsMasterClient)
             {
                 Plugin.Log?.LogInfo("Applying local configuration to runtime.");
@@ -254,18 +271,7 @@ namespace AdvancedREPO.Config.Patches
                 var types = new Type[] { typeof(float), typeof(bool) };
                 foreach (var config in Sync.Configs)
                 {
-                    if (config.Value is ConfigField<bool> @bool) SyncConfigBool(__instance, @bool.Key, @bool.Entry?.Value ?? default(bool));
-                    else if (config.Value is ConfigField<byte> @byte) SyncConfigByte(__instance, @byte.Key, @byte.Entry?.Value ?? default(byte));
-                    else if (config.Value is ConfigField<sbyte> @sbyte) SyncConfigSByte(__instance, @sbyte.Key, @sbyte.Entry?.Value ?? default(sbyte));
-                    else if (config.Value is ConfigField<short> @short) SyncConfigShort(__instance, @short.Key, @short.Entry?.Value ?? default(short));
-                    else if (config.Value is ConfigField<ushort> @ushort) SyncConfigUShort(__instance, @ushort.Key, @ushort.Entry?.Value ?? default(ushort));
-                    else if (config.Value is ConfigField<int> @int) SyncConfigInt(__instance, @int.Key, @int.Entry?.Value ?? default(int));
-                    else if (config.Value is ConfigField<uint> @uint) SyncConfigUInt(__instance, @uint.Key, @uint.Entry?.Value ?? default(uint));
-                    else if (config.Value is ConfigField<long> @long) SyncConfigLong(__instance, @long.Key, @long.Entry?.Value ?? default(long));
-                    else if (config.Value is ConfigField<ulong> @ulong) SyncConfigULong(__instance, @ulong.Key, @ulong.Entry?.Value ?? default(ulong));
-                    else if (config.Value is ConfigField<float> @float) SyncConfigFloat(__instance, @float.Key, @float.Entry?.Value ?? default(float));
-                    else if (config.Value is ConfigField<double> @double) SyncConfigDouble(__instance, @double.Key, @double.Entry?.Value ?? default(double));
-                    else if (config.Value is ConfigField<string> @string) SyncConfigString(__instance, @string.Key, @string.Entry?.Value ?? null);
+                    config.Value.SyncWithClients();
                 }
             }
         }

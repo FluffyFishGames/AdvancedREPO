@@ -4,7 +4,7 @@ using BepInEx.Logging;
 
 namespace AdvancedREPO.Config
 {
-    [BepInPlugin("potatoepet.advancedrepo.config", "AdvancedREPO.Config", "1.0.0")]
+    [BepInPlugin("potatoepet.advancedrepo.config", "AdvancedREPO.Config", "1.0.1")]
     public class Plugin : BaseUnityPlugin
     {
         public static ManualLogSource? Log;

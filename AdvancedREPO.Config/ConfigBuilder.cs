@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.IO;
 using System;
+using AdvancedREPO.Config.Patches;
 
 namespace AdvancedREPO.Config
 {
@@ -225,8 +226,19 @@ namespace AdvancedREPO.Config
                 ret.Key += $":{ret.Entry.Definition.Section}";
             ret.Key += $":{ret.Entry.Definition.Key}";
             if (ret.Sync)
+            {
+                ret.Entry.SettingChanged += (sender, e) => {
+                    if (!ret.SyncedValue.Equals(ret.Entry.Value))
+                        ret.SyncWithClients();
+                };
                 ret.AddToSync();
+            }
             return ret;
+        }
+
+        private void Entry_SettingChanged(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
