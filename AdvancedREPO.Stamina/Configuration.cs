@@ -12,6 +12,7 @@ namespace AdvancedREPO.Stamina
     {
         public static ConfigField<bool> NoStaminaDrainDuringJump;
         public static ConfigField<bool> NoSlowdownDuringJump;
+        public static ConfigField<bool> NoAccelerationDuringJump;
         public static ConfigField<float> JumpStaminaCost;
         public static ConfigField<bool> JumpStaminaPrevent;
         public static ConfigField<float> StaminaSprintDrainRate;
@@ -25,6 +26,7 @@ namespace AdvancedREPO.Stamina
             var configFile = new ConfigFile(Path.Combine(Paths.ConfigPath, "AdvancedREPO/AdvancedStamina.cfg"), true);
 
             NoSlowdownDuringJump = configFile.Bind<bool>("Jumping", "No slow down", true, "Do not slow down the player when stamina reaches zero while jumping.").Sync();
+            NoAccelerationDuringJump = configFile.Bind<bool>("Jumping", "No acceleration", true, "Do not accelerate the player when sprint is hold while jumping.").Sync();
             NoStaminaDrainDuringJump = configFile.Bind<bool>("Jumping", "No stamina drain", true, "Do not drain stamina during jumping.").Sync();
             JumpStaminaCost = configFile.Bind<float>("Jumping", "Jump stamina cost", 0f, "How much stamina should a jump cost? Zero is the default game behavior.").Sync();
             JumpStaminaPrevent = configFile.Bind<bool>("Jumping", "Prevent jump", false, "Should a jump be prevented if stamina is insufficient?").Sync();
