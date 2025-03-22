@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34701.34
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdvancedREPO.Stamina.Patcher", "AdvancedREPO.Stamina.Prepatcher\AdvancedREPO.Stamina.Patcher.csproj", "{099D9DF3-EB25-45F4-BC87-C85EBF6FF8CA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdvancedREPO.Stamina", "AdvancedREPO.Stamina\AdvancedREPO.Stamina.csproj", "{77D77264-8FA5-4C1F-8F3E-09D4B2308858}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdvancedREPO.Config", "AdvancedREPO.Config\AdvancedREPO.Config.csproj", "{710FA985-FE09-41BB-8F7E-A1FF7A9427A3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdvancedREPO.Config.Patcher", "AdvancedREPO.Config.Prepatcher\AdvancedREPO.Config.Patcher.csproj", "{CAC2CB1B-A272-477B-B080-BA16F35CB0DE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdvancedREPO.Patcher", "AdvancedREPO.Patcher\AdvancedREPO.Patcher.csproj", "{D043119A-14C0-4EB6-BDED-A7224306DDAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedREPO.Utils", "AdvancedREPO.Utils\AdvancedREPO.Utils.csproj", "{E10F416C-52E4-41FE-B758-C33E85F59D51}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{099D9DF3-EB25-45F4-BC87-C85EBF6FF8CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{099D9DF3-EB25-45F4-BC87-C85EBF6FF8CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{099D9DF3-EB25-45F4-BC87-C85EBF6FF8CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{099D9DF3-EB25-45F4-BC87-C85EBF6FF8CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77D77264-8FA5-4C1F-8F3E-09D4B2308858}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77D77264-8FA5-4C1F-8F3E-09D4B2308858}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77D77264-8FA5-4C1F-8F3E-09D4B2308858}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77D77264-8FA5-4C1F-8F3E-09D4B2308858}.Release|Any CPU.Build.0 = Release|Any CPU
+		{710FA985-FE09-41BB-8F7E-A1FF7A9427A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{710FA985-FE09-41BB-8F7E-A1FF7A9427A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{710FA985-FE09-41BB-8F7E-A1FF7A9427A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{710FA985-FE09-41BB-8F7E-A1FF7A9427A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAC2CB1B-A272-477B-B080-BA16F35CB0DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAC2CB1B-A272-477B-B080-BA16F35CB0DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAC2CB1B-A272-477B-B080-BA16F35CB0DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAC2CB1B-A272-477B-B080-BA16F35CB0DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D043119A-14C0-4EB6-BDED-A7224306DDAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D043119A-14C0-4EB6-BDED-A7224306DDAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D043119A-14C0-4EB6-BDED-A7224306DDAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D043119A-14C0-4EB6-BDED-A7224306DDAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E10F416C-52E4-41FE-B758-C33E85F59D51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E10F416C-52E4-41FE-B758-C33E85F59D51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E10F416C-52E4-41FE-B758-C33E85F59D51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E10F416C-52E4-41FE-B758-C33E85F59D51}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1E8EF797-39B0-462A-9BC8-A30191FAFC29}
+	EndGlobalSection
+EndGlobal

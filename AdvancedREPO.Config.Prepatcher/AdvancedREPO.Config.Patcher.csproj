@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<AssemblyName>AdvancedREPO.Config.Patcher</AssemblyName>
+		<Description>Synchronizing configurations for REPO</Description>
+		<Version>1.0.0</Version>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<LangVersion>latest</LangVersion>
+		<RestoreAdditionalProjectSources>
+			https://api.nuget.org/v3/index.json;
+			https://nuget.bepinex.dev/v3/index.json
+		</RestoreAdditionalProjectSources>
+		<RootNamespace>AdvancedREPO.Config</RootNamespace>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<OutputPath>../output/AdvancedREPO.Config/BepInEx/patchers/</OutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\AdvancedREPO.Patcher\AdvancedREPO.Patcher.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Include="BepInEx">
+			<HintPath>..\libs\BepInEx.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="BepInEx.Preloader">
+			<HintPath>..\libs\BepInEx.Preloader.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Mono.Cecil">
+			<HintPath>..\libs\Mono.Cecil.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Mono.Cecil.Rocks">
+			<HintPath>..\libs\Mono.Cecil.Rocks.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Mono.Cecil.Mdb">
+			<HintPath>..\libs\Mono.Cecil.Mdb.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Mono.Cecil.Pdb">
+			<HintPath>..\libs\Mono.Cecil.Pdb.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Mono.Cecil.Rocks">
+			<HintPath>..\libs\Mono.Cecil.Rocks.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+	</ItemGroup>
+</Project>
