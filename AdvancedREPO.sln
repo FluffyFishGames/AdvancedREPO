@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdvancedREPO.Stamina.Patcher", "AdvancedREPO.Stamina.Prepatcher\AdvancedREPO.Stamina.Patcher.csproj", "{099D9DF3-EB25-45F4-BC87-C85EBF6FF8CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdvancedREPO.Stamina.Patcher", "AdvancedREPO.Stamina.Patcher\AdvancedREPO.Stamina.Patcher.csproj", "{099D9DF3-EB25-45F4-BC87-C85EBF6FF8CA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdvancedREPO.Stamina", "AdvancedREPO.Stamina\AdvancedREPO.Stamina.csproj", "{77D77264-8FA5-4C1F-8F3E-09D4B2308858}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdvancedREPO.Config", "AdvancedREPO.Config\AdvancedREPO.Config.csproj", "{710FA985-FE09-41BB-8F7E-A1FF7A9427A3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdvancedREPO.Config.Patcher", "AdvancedREPO.Config.Prepatcher\AdvancedREPO.Config.Patcher.csproj", "{CAC2CB1B-A272-477B-B080-BA16F35CB0DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdvancedREPO.Config.Patcher", "AdvancedREPO.Config.Patcher\AdvancedREPO.Config.Patcher.csproj", "{CAC2CB1B-A272-477B-B080-BA16F35CB0DE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdvancedREPO.Patcher", "AdvancedREPO.Patcher\AdvancedREPO.Patcher.csproj", "{D043119A-14C0-4EB6-BDED-A7224306DDAF}"
 EndProject
