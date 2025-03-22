@@ -2,6 +2,7 @@
 using Mono.Cecil;
 using System.Collections.Generic;
 using System.Linq;
+using Mono.Cecil.Cil;
 
 namespace AdvancedREPO.Config.Patches
 {
@@ -31,15 +32,21 @@ namespace AdvancedREPO.Config.Patches
             foreach (var kv in types)
             {
                 var method = new MethodDefinition($"SyncConfig{kv.Key}", MethodAttributes.Public, type.Module.TypeSystem.Void);
-                method.Parameters.Add(new ParameterDefinition(type.Module.TypeSystem.String));
-                method.Parameters.Add(new ParameterDefinition(kv.Value));
-
+                method.Parameters.Add(new ParameterDefinition("propertyName", ParameterAttributes.None, type.Module.TypeSystem.String));
+                method.Parameters.Add(new ParameterDefinition("value", ParameterAttributes.None, kv.Value));
+                method.Body = new MethodBody(method);
+                var il = method.Body.GetILProcessor();
+                il.Append(il.Create(OpCodes.Ret));
+                
                 type.Methods.Add(method);
                 
                 var rpcMethod = new MethodDefinition($"SyncConfig{kv.Key}RPC", MethodAttributes.Public, type.Module.TypeSystem.Void);
-                rpcMethod.Parameters.Add(new ParameterDefinition(type.Module.TypeSystem.String));
-                rpcMethod.Parameters.Add(new ParameterDefinition(kv.Value));
+                rpcMethod.Parameters.Add(new ParameterDefinition("propertyName", ParameterAttributes.None, type.Module.TypeSystem.String));
+                rpcMethod.Parameters.Add(new ParameterDefinition("value", ParameterAttributes.None, kv.Value));
                 rpcMethod.CustomAttributes.Add(new CustomAttribute(attribute.Constructor));
+                rpcMethod.Body = new MethodBody(rpcMethod);
+                il = rpcMethod.Body.GetILProcessor();
+                il.Append(il.Create(OpCodes.Ret));
                 type.Methods.Add(rpcMethod);
             }
         }

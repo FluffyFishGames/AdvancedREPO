@@ -39,7 +39,7 @@ namespace AdvancedREPO.Config
         {
             if (field.Entry != null)
             {
-                Plugin.Log?.LogDebug($"Received configuration for {field.Key}: {field.Entry.Value}");
+                Plugin.Log?.LogDebug($"Applying local configuration for {field.Key}: {field.Entry.Value}");
                 field.SyncedValue = field.Entry.Value;
             }
         }
