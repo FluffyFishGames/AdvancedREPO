@@ -1,6 +1,4 @@
-﻿using AdvancedREPO.Stamina;
-using AdvancedREPO.Stamina.Patches;
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Logging;
 using System;
 
@@ -13,10 +11,8 @@ namespace AdvancedREPO.Stamina
         void Awake()
         {
             Log = base.Logger;
-            Configuration.Initialize(Config);
             Log.LogInfo("Applying AdvancedREPO.Stamina...");
-            PlayerControllerPatches.ApplyPatches();
-            PunManagerPatches.ApplyPatches();
+            Configuration.Initialize(Config);
             Log.LogInfo("AdvancedREPO.Stamina applied!");
         }
     }

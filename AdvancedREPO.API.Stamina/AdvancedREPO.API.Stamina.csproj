@@ -1,29 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
-		<AssemblyName>AdvancedREPO.Stamina</AssemblyName>
-		<Description>Better stamina for REPO</Description>
+		<AssemblyName>AdvancedREPO.API.Stamina</AssemblyName>
+		<Description>API for better stamina for REPO</Description>
 		<Version>1.0.0</Version>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<LangVersion>latest</LangVersion>
 		<RestoreAdditionalProjectSources>
-		  https://api.nuget.org/v3/index.json;
-		  https://nuget.bepinex.dev/v3/index.json
+			https://api.nuget.org/v3/index.json;
+			https://nuget.bepinex.dev/v3/index.json
 		</RestoreAdditionalProjectSources>
-		<RootNamespace>AdvancedREPO.Stamina</RootNamespace>
+		<RootNamespace>AdvancedREPO.API</RootNamespace>
 		<GameDirectory>C:\Program Files (x86)\Steam\steamapps\common\REPO</GameDirectory>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-		<OutputPath>../output/AdvancedREPO.Stamina/BepInEx/plugins/</OutputPath>
+		<OutputPath>../output/AdvancedREPO.API.Stamina/BepInEx/plugins/</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\AdvancedREPO.API.Stamina\AdvancedREPO.API.Stamina.csproj" />
-	  <ProjectReference Include="..\AdvancedREPO.Config\AdvancedREPO.Config.csproj">
-	    <Private>False</Private>
-	  </ProjectReference>
-	  <ProjectReference Include="..\AdvancedREPO.Utils\AdvancedREPO.Utils.csproj">
-	    <Private>False</Private>
-	  </ProjectReference>
+		<ProjectReference Include="..\AdvancedREPO.Utils\AdvancedREPO.Utils.csproj">
+			<Private>False</Private>
+		</ProjectReference>
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="BepInEx">

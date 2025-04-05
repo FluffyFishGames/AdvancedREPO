@@ -258,7 +258,6 @@ namespace AdvancedREPO.Config.Patches
         [HarmonyPrefix]
         public static void InitiateSync(PunManager __instance)
         {
-            Instance = __instance;
             if (!SemiFunc.IsMultiplayer() || PhotonNetwork.IsMasterClient)
             {
                 Plugin.Log?.LogInfo("Applying local configuration to runtime.");

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Reflection;
 
-namespace AdvancedREPO.Stamina.Patches
+namespace AdvancedREPO.API.Patches
 {
     public class PunManagerPatches
     {
@@ -14,9 +14,9 @@ namespace AdvancedREPO.Stamina.Patches
         public static void ApplyPatches()
         {
             // Patch
-            Plugin.Log?.LogInfo("Patching PunManager...");
+            Stamina.Log?.LogInfo("Patching PunManager...");
             Harmony.CreateAndPatchAll(typeof(PunManagerPatches));
-            Plugin.Log?.LogInfo("Patched PunManager!");
+            Stamina.Log?.LogInfo("Patched PunManager!");
         }
 
         /// <summary>
@@ -28,9 +28,9 @@ namespace AdvancedREPO.Stamina.Patches
         [HarmonyTranspiler]
         public static IEnumerable<CodeInstruction> PatchUpdateEnergyRightAway(IEnumerable<CodeInstruction> instructions)
         {
-            Plugin.Log?.LogMessage("Patching PunManager->UpdateEnergyRightAway...");
+            Stamina.Log?.LogMessage("Patching PunManager->UpdateEnergyRightAway...");
 
-            var getStaminaPerUpgrade = typeof(PlayerControllerPatches).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == "GetStaminaPerUpgrade").First();
+            var getStaminaPerUpgrade = typeof(Stamina).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == nameof(Stamina.GetStaminaPerUpgrade)).First();
             var inst = new List<CodeInstruction>(instructions);
             bool success = false;
             for (var i = 0; i < inst.Count - 3; i++)
@@ -44,9 +44,9 @@ namespace AdvancedREPO.Stamina.Patches
                 }
             }
             if (success)
-                Plugin.Log?.LogMessage("Patched PunManager->UpdateEnergyRightAway!");
+                Stamina.Log?.LogMessage("Patched PunManager->UpdateEnergyRightAway!");
             else
-                Plugin.Log?.LogError("Failed to patch PunManager->UpdateEnergyRightAway!");
+                Stamina.Log?.LogError("Failed to patch PunManager->UpdateEnergyRightAway!");
             return inst.AsEnumerable();
         }
     }

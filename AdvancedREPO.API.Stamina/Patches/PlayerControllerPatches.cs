@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using UnityEngine;
 
-namespace AdvancedREPO.Stamina.Patches
+namespace AdvancedREPO.API.Patches
 {
     /// <summary>
     /// Contains patches for global::PlayerController
@@ -16,17 +16,17 @@ namespace AdvancedREPO.Stamina.Patches
         /// <summary>
         /// The SprintJump field added by pre-patcher
         /// </summary>
-        private static Field<PlayerController, bool>? IsJumpingField;
+        internal static Field<PlayerController, bool>? IsJumpingField;
 
         /// <summary>
         /// The JumpImpulse field
         /// </summary>
-        private static Field<PlayerController, bool>? JumpImpulseField;
+        internal static Field<PlayerController, bool>? JumpImpulseField;
 
         /// <summary>
         /// The Grounded field of PlayerCollisionGrounded
         /// </summary>
-        private static Field<PlayerCollisionGrounded, bool>? GroundedField;
+        internal static Field<PlayerCollisionGrounded, bool>? GroundedField;
 
         /// <summary>
         /// Will apply all patches contained in this class
@@ -41,9 +41,9 @@ namespace AdvancedREPO.Stamina.Patches
             GroundedField = new(typeof(PlayerCollisionGrounded).GetFields(BindingFlags.NonPublic | BindingFlags.Instance).Where(e => e.Name == "Grounded").First());
 
             // Patch
-            Plugin.Log?.LogInfo("Patching PlayerController...");
+            Stamina.Log?.LogInfo("Patching PlayerController...");
             Harmony.CreateAndPatchAll(typeof(PlayerControllerPatches));
-            Plugin.Log?.LogInfo("Patched PlayerController!");
+            Stamina.Log?.LogInfo("Patched PlayerController!");
         }
 
         /// <summary>
@@ -63,87 +63,16 @@ namespace AdvancedREPO.Stamina.Patches
             // set sprint jump field to true if sprint was active when jump was initiated.
             if (JumpImpulseField?.GetValue(playerController) ?? false)
             {
-                if (Configuration.JumpStaminaCost.Value != 0)
+                if (Stamina.JumpStaminaCost != 0)
                 {
-                    if (!Configuration.JumpStaminaPrevent.Value || playerController.EnergyCurrent > Configuration.JumpStaminaCost.Value)
-                        playerController.EnergyCurrent = Mathf.Min(playerController.EnergyStart, Mathf.Max(0, playerController.EnergyCurrent - Configuration.JumpStaminaCost.Value));
-                    else if (Configuration.JumpStaminaPrevent.Value)
+                    if (!Stamina.JumpStaminaPrevent || playerController.EnergyCurrent >= Stamina.JumpStaminaCost)
+                        playerController.EnergyCurrent = Mathf.Min(playerController.EnergyStart, Mathf.Max(0, playerController.EnergyCurrent - Stamina.JumpStaminaCost));
+                    else if (Stamina.JumpStaminaPrevent)
                         JumpImpulseField?.SetValue(playerController, false);
                 }
                 IsJumpingField?.SetValue(playerController, true);// SprintJumpField.GetValue(playerController) || playerController.sprinting);
             }
             
-        }
-
-        /// <summary>
-        /// Returns the stamina recharge rate for the player depending on the players state.
-        /// </summary>
-        /// <param name="playerController">The player</param>
-        /// <returns>The recharge rate</returns>
-        public static float GetStaminaRechargeRate(PlayerController playerController)
-        {
-            if (playerController.moving)
-            {
-                if (playerController.Crouching || playerController.Crawling)
-                    return Configuration.StaminaRechargeCrouchingRate.Value / 100f;
-                else
-                    return Configuration.StaminaRechargeRate.Value / 100f;
-            }
-            else
-            {
-                if (playerController.Crouching || playerController.Crawling)
-                    return Configuration.StaminaRechargeCrouchingStillRate.Value / 100f;
-                else
-                    return Configuration.StaminaRechargeStandingRate.Value / 100f;
-            }
-        }
-
-        /// <summary>
-        /// Returns if the player has enough stamina to sprint (will return true if jumping and no slowdown during jump is active)
-        /// </summary>
-        /// <param name="playerController">The PlayerController</param>
-        /// <returns>Whether sprint speed should be applied to the player</returns>
-        public static bool EnoughStaminaForSprint(PlayerController playerController)
-        {
-            return playerController.EnergyCurrent >= 1f || (Configuration.NoSlowdownDuringJump.Value && (IsJumpingField?.GetValue(playerController) ?? false));
-        }
-
-        /// <summary>
-        /// How much to add to the time of the lerp of the sprint speed. If acceleration in jump is deactivated this will return 0.
-        /// </summary>
-        /// <param name="playerController">The PlayerController</param>
-        /// <returns>The value to add to t</returns>
-        public static float GetSprintLerpChange(PlayerController playerController)
-        {
-            return !Configuration.NoAccelerationDuringJump.Value || !IsJumpingField.GetValue(playerController) ? playerController.SprintAcceleration * Time.fixedDeltaTime : 0;
-        }
-
-        /// <summary>
-        /// Returns a multiplicator for the stamina drain. If no stamina drain during jumping is active it returns 0.
-        /// </summary>
-        /// <param name="playerController">The PlayerController</param>
-        /// <returns>A multiplicator for stamina drain</returns>
-        public static float GetStaminaDrain(PlayerController playerController)
-        {
-            return Configuration.NoStaminaDrainDuringJump.Value && IsJumpingField.GetValue(playerController) ? 0f : Configuration.StaminaSprintDrainRate.Value / 100f;
-        }
-
-        /// <summary>
-        /// Returns how much stamina is the baseline
-        /// </summary>
-        /// <returns>The base stamina</returns>
-        public static float GetStartStamina()
-        {
-            return Configuration.StartingStamina.Value;
-        }
-
-        /// <summary>
-        /// Returns how much stamina an upgrade give
-        /// </summary>
-        /// <returns>Stamina per upgrade</returns>
-        public static float GetStaminaPerUpgrade()
-        {
-            return Configuration.StaminaPerUpgrade.Value;
         }
 
         /// <summary>
@@ -156,17 +85,19 @@ namespace AdvancedREPO.Stamina.Patches
         [HarmonyTranspiler]
         public static IEnumerable<CodeInstruction> PatchFixedUpdate(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
         {
-            Plugin.Log?.LogMessage("Patching PlayerController->FixedUpdate...");
+            Stamina.Log?.LogMessage("Patching PlayerController->FixedUpdate...");
 
-            var fixedUpdateMethod = typeof(PlayerControllerPatches).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == "FixedUpdate").First();
-            var enoughStaminaForSprint = typeof(PlayerControllerPatches).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == "EnoughStaminaForSprint").First();
-            var getSprintLerpChange = typeof(PlayerControllerPatches).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == "GetSprintLerpChange").First();
-            var getStaminaDrain = typeof(PlayerControllerPatches).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == "GetStaminaDrain").First();
+            var fixedUpdateMethod = typeof(PlayerControllerPatches).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == nameof(FixedUpdate)).First();
+            var enoughStaminaForSprint = typeof(Stamina).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == nameof(Stamina.IsStaminaEnoughForSprint)).First();
+            var getSprintLerpChange = typeof(Stamina).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == nameof(Stamina.GetSprintLerpChange)).First();
+            var getStaminaDrain = typeof(Stamina).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == nameof(Stamina.GetStaminaDrainMultiplier)).First();
+            var getSlideStaminaCost = typeof(Stamina).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == nameof(Stamina.GetSlideStaminaCost)).First();
             var inst = new List<CodeInstruction>(instructions);
             bool success1 = false;
             bool success2 = false;
             bool success3 = false;
             bool success4 = false;
+            bool success5 = false;
             for (var i = 0; i < inst.Count; i++)
             {
                 // add method before "OverrideSpeedTick"
@@ -210,15 +141,23 @@ namespace AdvancedREPO.Stamina.Patches
                     inst.Insert(i + 4, new CodeInstruction(OpCodes.Ldarg_0));
                     success4 = true;
                 }
-                if (success1 && success2 && success3 && success4)
+                // change energy cost for slide
+                if (!success5 &&
+                    (inst[i].opcode == OpCodes.Ldc_R4 && inst[i].operand is float fl && fl == 5) &&
+                    (inst[i - 1].opcode == OpCodes.Ldfld && inst[i - 1].operand is FieldInfo f4 && f4.Name == "EnergyCurrent"))
+                {
+                    inst[i] = new CodeInstruction(OpCodes.Call, getSlideStaminaCost);
+                    success5 = true;
+                }
+                if (success1 && success2 && success3 && success4 && success5)
                     break;
             }
             
-            int successCount = (success1 ? 1 : 0) + (success2 ? 1 : 0) + (success3 ? 1 : 0) + (success4 ? 1 : 0);
-            if (successCount == 4)
-                Plugin.Log?.LogMessage("Patched PlayerController->FixedUpdate!");
+            int successCount = (success1 ? 1 : 0) + (success2 ? 1 : 0) + (success3 ? 1 : 0) + (success4 ? 1 : 0) + (success5 ? 1 : 0);
+            if (successCount == 5)
+                Stamina.Log?.LogMessage("Patched PlayerController->FixedUpdate!");
             else
-                Plugin.Log?.LogError($"Failed to patch PlayerController->FixedUpdate! ({successCount}/4 patches applied)");
+                Stamina.Log?.LogError($"Failed to patch PlayerController->FixedUpdate! ({successCount}/5 patches applied)");
             return inst.AsEnumerable();
         }
 
@@ -231,9 +170,9 @@ namespace AdvancedREPO.Stamina.Patches
         [HarmonyTranspiler]
         public static IEnumerable<CodeInstruction> PatchUpdate(IEnumerable<CodeInstruction> instructions)
         {
-            Plugin.Log?.LogMessage("Patching PlayerController->Update...");
+            Stamina.Log?.LogMessage("Patching PlayerController->Update...");
 
-            var getStaminaRechargeRate = typeof(PlayerControllerPatches).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == "GetStaminaRechargeRate").First();
+            var getStaminaRechargeMultiplier = typeof(Stamina).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == nameof(Stamina.GetStaminaRechargeMultiplier)).First();
             var inst = new List<CodeInstruction>(instructions);
             bool success = false;
             for (var i = 0; i < inst.Count - 3; i++)
@@ -244,16 +183,16 @@ namespace AdvancedREPO.Stamina.Patches
                     (inst[i + 3].opcode == OpCodes.Mul))
                 {
                     inst.Insert(i + 3, new CodeInstruction(OpCodes.Mul));
-                    inst.Insert(i + 3, new CodeInstruction(OpCodes.Call, getStaminaRechargeRate));
-                    inst.Insert(i + 3, new CodeInstruction(OpCodes.Ldarg_0, getStaminaRechargeRate));
+                    inst.Insert(i + 3, new CodeInstruction(OpCodes.Call, getStaminaRechargeMultiplier));
+                    inst.Insert(i + 3, new CodeInstruction(OpCodes.Ldarg_0, getStaminaRechargeMultiplier));
                     success = true;
                     break;
                 }
             }
             if (success)
-                Plugin.Log?.LogMessage("Patched PlayerController->Update!");
+                Stamina.Log?.LogMessage("Patched PlayerController->Update!");
             else
-                Plugin.Log?.LogError("Failed to patch PlayerController->Update!");
+                Stamina.Log?.LogError("Failed to patch PlayerController->Update!");
             return inst.AsEnumerable();
         }
 
@@ -266,11 +205,11 @@ namespace AdvancedREPO.Stamina.Patches
         [HarmonyTranspiler]
         public static IEnumerable<CodeInstruction> PatchLateStart(IEnumerable<CodeInstruction> instructions)
         {
-            Plugin.Log?.LogMessage("Patching PlayerController->LateStart...");
+            Stamina.Log?.LogMessage("Patching PlayerController->LateStart...");
 
             var energyStart = typeof(PlayerController).GetFields(BindingFlags.Public | BindingFlags.Instance).Where(e => e.Name == "EnergyStart").First();
-            var getStaminaPerUpgrade = typeof(PlayerControllerPatches).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == "GetStaminaPerUpgrade").First();
-            var getStartStamina = typeof(PlayerControllerPatches).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == "GetStartStamina").First();
+            var getStaminaPerUpgrade = typeof(Stamina).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == nameof(Stamina.GetStaminaPerUpgrade)).First();
+            var getStartStamina = typeof(Stamina).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == nameof(Stamina.GetStartStamina)).First();
             var inst = new List<CodeInstruction>(instructions);
             bool success1 = false;
             bool success2 = false;
@@ -298,9 +237,9 @@ namespace AdvancedREPO.Stamina.Patches
             }
             var successCount = (success1 ? 1 : 0) + (success2 ? 1 : 0);
             if (successCount == 2)
-                Plugin.Log?.LogMessage("Patched PlayerController->LateStart!");
+                Stamina.Log?.LogMessage("Patched PlayerController->LateStart!");
             else
-                Plugin.Log?.LogError($"Failed to patch PlayerController->LateStart! ({successCount}/3 patches applied)");
+                Stamina.Log?.LogError($"Failed to patch PlayerController->LateStart! ({successCount}/3 patches applied)");
             return inst.AsEnumerable();
         }
 

@@ -14,7 +14,7 @@ namespace AdvancedREPO.Config
         internal bool Sync = false;
         internal string Key = null;
 
-        public void AddToSync()
+        public virtual void AddToSync()
         {
             AdvancedREPO.Config.Sync.Configs.Add(this.Key, this);
         }
@@ -27,8 +27,62 @@ namespace AdvancedREPO.Config
 
     public class ConfigField<T> : ConfigField
     {
-        public ConfigEntry<T> Entry;
-        internal T? SyncedValue;
+        public delegate void SettingChangedHandler(object sender, EventArgs e);
+        public event SettingChangedHandler SettingChanged;
+        public delegate void ValueChangedHandler(object sender, EventArgs e);
+        public event ValueChangedHandler ValueChanged;
+        private ConfigEntry<T> _Entry;
+        public ConfigEntry<T> Entry
+        {
+            get
+            {
+                return _Entry;
+            }
+            set
+            {
+                if (_Entry != null)
+                {
+                    _Entry.SettingChanged -= SettingChangedListener;
+                }
+                _Entry = value;
+                OldValue = _Entry.Value;
+                _Entry.SettingChanged += SettingChangedListener;
+            }
+        }
+
+        private void SettingChangedListener(object sender, EventArgs e)
+        {
+            if ((OldValue != null && !OldValue.Equals(Entry.Value)) || (OldValue == null && Entry.Value != null))
+            {
+                OldValue = Entry.Value;
+                SettingChanged?.Invoke(sender, e);
+            }
+            if (Sync && ((SyncedValue != null && !SyncedValue.Equals(Entry.Value)) || (SyncedValue == null && Entry.Value != null)))
+            {
+                SyncWithClients();
+            }
+        }
+
+        private T OldValue;
+        private T? _SyncedValue;
+        internal T? SyncedValue
+        {
+            get
+            {
+                return _SyncedValue;
+            }
+            set
+            {
+                bool changed = false;
+                if ((value != null && !value.Equals(Value)) || (value == null && Value != null))
+                {
+                    changed = true;
+                }
+                _SyncedValue = value;
+                if (changed)
+                    ValueChanged?.Invoke(this, new EventArgs());
+            }
+        }
 
         /// <summary>
         /// When set saves the value in config.
@@ -40,21 +94,21 @@ namespace AdvancedREPO.Config
             {
                 if (Sync)
                     return SyncedValue;
-                if (Entry != null)
-                    return Entry.Value;
+                if (_Entry != null)
+                    return _Entry.Value;
                 return default(T);
             }
             set
             {
-                if (Entry != null)
-                    Entry.Value = value;
+                if (_Entry != null)
+                    _Entry.Value = value;
             }
         }
 
         internal override void SyncWithClients()
         {
-            var __instance = PunManagerPatches.Instance;
-            if (__instance != null && !SemiFunc.IsMultiplayer() || PhotonNetwork.IsMasterClient)
+            var __instance = PunManager.instance;
+            if (__instance != null && (!SemiFunc.IsMultiplayer() || PhotonNetwork.IsMasterClient))
             {
                 if (typeof(T) == typeof(bool)) PunManagerPatches.SyncConfigBool(__instance, Key, (bool)(object)Entry.Value);
                 else if (typeof(T) == typeof(byte)) PunManagerPatches.SyncConfigByte(__instance, Key, (byte)(object)Entry.Value);
