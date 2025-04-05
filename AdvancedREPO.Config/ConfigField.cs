@@ -31,6 +31,7 @@ namespace AdvancedREPO.Config
         public event SettingChangedHandler SettingChanged;
         public delegate void ValueChangedHandler(object sender, EventArgs e);
         public event ValueChangedHandler ValueChanged;
+        private bool ReceivedSynced = false;
         private ConfigEntry<T> _Entry;
         public ConfigEntry<T> Entry
         {
@@ -55,7 +56,10 @@ namespace AdvancedREPO.Config
             if ((OldValue != null && !OldValue.Equals(Entry.Value)) || (OldValue == null && Entry.Value != null))
             {
                 OldValue = Entry.Value;
+                var oldValue = Value;
                 SettingChanged?.Invoke(sender, e);
+                if (!Value.Equals(oldValue))
+                    ValueChanged?.Invoke(this, new EventArgs());
             }
             if (Sync && ((SyncedValue != null && !SyncedValue.Equals(Entry.Value)) || (SyncedValue == null && Entry.Value != null)))
             {
@@ -73,6 +77,7 @@ namespace AdvancedREPO.Config
             }
             set
             {
+                ReceivedSynced = true;
                 bool changed = false;
                 if ((value != null && !value.Equals(Value)) || (value == null && Value != null))
                 {
@@ -92,7 +97,7 @@ namespace AdvancedREPO.Config
         {
             get
             {
-                if (Sync)
+                if (Sync && ReceivedSynced)
                     return SyncedValue;
                 if (_Entry != null)
                     return _Entry.Value;

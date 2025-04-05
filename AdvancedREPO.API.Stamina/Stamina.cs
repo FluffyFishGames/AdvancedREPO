@@ -208,6 +208,7 @@ namespace AdvancedREPO.API
                 NoStaminaDrainDuringJumpValues.Remove(modName + key);
                 NoStaminaDrainDuringJump = NoStaminaDrainDuringJumpValues.Any(x => x.Value);
             }
+            Log?.LogDebug($"Mod {modName} set no stamina drain during jump for key {key} to {status}. New value is {NoStaminaDrainDuringJump}");
         }
 
         /// <summary>
@@ -230,6 +231,7 @@ namespace AdvancedREPO.API
                 NoSlowdownDuringJumpValues.Remove(modName + key);
                 NoSlowdownDuringJump = NoSlowdownDuringJumpValues.Any(x => x.Value);
             }
+            Log?.LogDebug($"Mod {modName} set no slowdown during jump for key {key} to {status}. New value is {NoSlowdownDuringJump}");
         }
 
         /// <summary>
@@ -252,6 +254,7 @@ namespace AdvancedREPO.API
                 NoAccelerationDuringJumpValues.Remove(modName + key);
                 NoAccelerationDuringJump = NoAccelerationDuringJumpValues.Any(x => x.Value);
             }
+            Log?.LogDebug($"Mod {modName} set no acceleration during jump for key {key} to {status}. New value is {NoAccelerationDuringJump}");
         }
 
         /// <summary>
@@ -271,6 +274,7 @@ namespace AdvancedREPO.API
             else
                 JumpStaminaCostValues.Remove(modName + key);
             JumpStaminaCost = JumpStaminaCostValues.Sum(x => x.Value);
+            Log?.LogDebug($"Mod {modName} set added jump stamina cost for key {key} to {cost}. New value is {JumpStaminaCost}");
         }
 
         /// <summary>
@@ -293,6 +297,7 @@ namespace AdvancedREPO.API
                 JumpStaminaPreventValues.Remove(modName + key);
                 JumpStaminaPrevent = JumpStaminaPreventValues.Any(x => x.Value);
             }
+            Log?.LogDebug($"Mod {modName} set jump stamina prevent for key {key} to {status}. New value is {JumpStaminaPrevent}");
         }
 
         /// <summary>
@@ -315,6 +320,7 @@ namespace AdvancedREPO.API
             foreach (var kv in StaminaSprintDrainRateValues)
                 val = val * kv.Value;
             StaminaSprintDrainRate = val;
+            Log?.LogDebug($"Mod {modName} set stamina sprint drain rate for key {key} to {value}. New value is {StaminaSprintDrainRate}");
         }
 
         /// <summary>
@@ -338,6 +344,7 @@ namespace AdvancedREPO.API
             foreach (var kv in StaminaRechargeRateValues)
                 val = val * kv.Value;
             StaminaRechargeRate = val;
+            Log?.LogDebug($"Mod {modName} set stamina recharge rate for key {key} to {value}. New value is {StaminaRechargeRate}");
         }
 
         /// <summary>
@@ -362,6 +369,7 @@ namespace AdvancedREPO.API
             foreach (var kv in StaminaStandingRechargeMultiplierValues)
                 val = val * kv.Value;
             StaminaStandingRechargeMultiplier = val;
+            Log?.LogDebug($"Mod {modName} set standing stamina recharge multiplier for key {key} to {value}. New value is {StaminaStandingRechargeMultiplier}");
         }
 
         /// <summary>
@@ -386,6 +394,7 @@ namespace AdvancedREPO.API
             foreach (var kv in StaminaCrouchingRechargeMultiplierValues)
                 val = val * kv.Value;
             StaminaCrouchingRechargeMultiplier = val;
+            Log?.LogDebug($"Mod {modName} set crouching stamina recharge multiplier for key {key} to {value}. New value is {StaminaCrouchingRechargeMultiplier}");
         }
 
         /// <summary>
@@ -406,6 +415,7 @@ namespace AdvancedREPO.API
                 StartingStaminaValues.Remove(modName + key);
 
             StartingStamina = 40 + StartingStaminaValues.Sum(x => x.Value);
+            Log?.LogDebug($"Mod {modName} set added starting stamina for key {key} to {value}. New value is {StartingStamina}");
         }
 
         /// <summary>
@@ -426,6 +436,7 @@ namespace AdvancedREPO.API
                 StaminaPerUpgradeValues.Remove(modName + key);
 
             StaminaPerUpgrade = 10 + StaminaPerUpgradeValues.Sum(x => x.Value);
+            Log?.LogDebug($"Mod {modName} set added stamina per upgrade for key {key} to {value}. New value is {StaminaPerUpgrade}");
         }
 
         /// <summary>
@@ -446,6 +457,7 @@ namespace AdvancedREPO.API
                 SlideStaminaCostValues.Remove(modName + key);
 
             SlideStaminaCost = 10 + SlideStaminaCostValues.Sum(x => x.Value);
+            Log?.LogDebug($"Mod {modName} set added slide stamina cost for key {key} to {cost}. New value is {SlideStaminaCost}");
         }
 
         /// <summary>
@@ -455,7 +467,9 @@ namespace AdvancedREPO.API
         /// <returns>The recharge rate</returns>
         public static float GetStaminaRechargeMultiplier(PlayerController playerController)
         {
-            return StaminaRechargeRate * (playerController.moving ? 1 : StaminaStandingRechargeMultiplier) * (playerController.Crouching ? StaminaCrouchingRechargeMultiplier : 1);
+            var ret = StaminaRechargeRate * (playerController.moving ? 1f : StaminaStandingRechargeMultiplier) * (playerController.Crouching ? StaminaCrouchingRechargeMultiplier : 1f);
+            //Log?.LogDebug("Recharge: " + ret + " (" + StaminaStandingRechargeMultiplier + ", " + StaminaCrouchingRechargeMultiplier + ", " + StaminaRechargeRate + ")");
+            return ret;
         }
 
         /// <summary>

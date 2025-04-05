@@ -42,10 +42,14 @@ namespace AdvancedREPO.Config.Patches
         [HarmonyPrefix]
         public static void SyncConfigBool(PunManager __instance, string propertyName, bool value)
         {
-            if (SemiFunc.IsMasterClientOrSingleplayer() && SemiFunc.IsMultiplayer())
+            if (SemiFunc.IsMasterClientOrSingleplayer())
             {
-                var photonView = PhotonViewField?.GetValue(__instance) ?? null;
-                photonView?.RPC("SyncConfigBoolRPC", RpcTarget.All, propertyName, value);
+                if (SemiFunc.IsMultiplayer())
+                {
+                    var photonView = PhotonViewField?.GetValue(__instance) ?? null;
+                    photonView?.RPC("SyncConfigBoolRPC", RpcTarget.All, propertyName, value);
+                }
+                else SyncConfigBoolRPC(__instance, propertyName, value);
             }
         }
 
@@ -53,10 +57,14 @@ namespace AdvancedREPO.Config.Patches
         [HarmonyPrefix]
         public static void SyncConfigByte(PunManager __instance, string propertyName, byte value)
         {
-            if (SemiFunc.IsMasterClientOrSingleplayer() && SemiFunc.IsMultiplayer())
+            if (SemiFunc.IsMasterClientOrSingleplayer())
             {
-                var photonView = PhotonViewField?.GetValue(__instance) ?? null;
-                photonView?.RPC("SyncConfigByteRPC", RpcTarget.All, propertyName, value);
+                if (SemiFunc.IsMultiplayer())
+                {
+                    var photonView = PhotonViewField?.GetValue(__instance) ?? null;
+                    photonView?.RPC("SyncConfigByteRPC", RpcTarget.All, propertyName, value);
+                }
+                else SyncConfigByteRPC(__instance, propertyName, value);
             }
         }
 
@@ -64,10 +72,14 @@ namespace AdvancedREPO.Config.Patches
         [HarmonyPrefix]
         public static void SyncConfigSByte(PunManager __instance, string propertyName, sbyte value)
         {
-            if (SemiFunc.IsMasterClientOrSingleplayer() && SemiFunc.IsMultiplayer())
+            if (SemiFunc.IsMasterClientOrSingleplayer())
             {
-                var photonView = PhotonViewField?.GetValue(__instance) ?? null;
-                photonView?.RPC("SyncConfigSByteRPC", RpcTarget.All, propertyName, value);
+                if (SemiFunc.IsMultiplayer())
+                {
+                    var photonView = PhotonViewField?.GetValue(__instance) ?? null;
+                    photonView?.RPC("SyncConfigSByteRPC", RpcTarget.All, propertyName, value);
+                }
+                else SyncConfigSByteRPC(__instance, propertyName, value);
             }
         }
 
@@ -75,10 +87,14 @@ namespace AdvancedREPO.Config.Patches
         [HarmonyPrefix]
         public static void SyncConfigShort(PunManager __instance, string propertyName, short value)
         {
-            if (SemiFunc.IsMasterClientOrSingleplayer() && SemiFunc.IsMultiplayer())
+            if (SemiFunc.IsMasterClientOrSingleplayer())
             {
-                var photonView = PhotonViewField?.GetValue(__instance) ?? null;
-                photonView?.RPC("SyncConfigShortRPC", RpcTarget.All, propertyName, value);
+                if (SemiFunc.IsMultiplayer())
+                {
+                    var photonView = PhotonViewField?.GetValue(__instance) ?? null;
+                    photonView?.RPC("SyncConfigShortRPC", RpcTarget.All, propertyName, value);
+                }
+                else SyncConfigShortRPC(__instance, propertyName, value);
             }
         }
 
@@ -86,10 +102,14 @@ namespace AdvancedREPO.Config.Patches
         [HarmonyPrefix]
         public static void SyncConfigUShort(PunManager __instance, string propertyName, ushort value)
         {
-            if (SemiFunc.IsMasterClientOrSingleplayer() && SemiFunc.IsMultiplayer())
+            if (SemiFunc.IsMasterClientOrSingleplayer())
             {
-                var photonView = PhotonViewField?.GetValue(__instance) ?? null;
-                photonView?.RPC("SyncConfigUShortRPC", RpcTarget.All, propertyName, value);
+                if (SemiFunc.IsMultiplayer())
+                {
+                    var photonView = PhotonViewField?.GetValue(__instance) ?? null;
+                    photonView?.RPC("SyncConfigUShortRPC", RpcTarget.All, propertyName, value);
+                }
+                else SyncConfigUShortRPC(__instance, propertyName, value);
             }
         }
 
@@ -97,10 +117,14 @@ namespace AdvancedREPO.Config.Patches
         [HarmonyPrefix]
         public static void SyncConfigInt(PunManager __instance, string propertyName, int value)
         {
-            if (SemiFunc.IsMasterClientOrSingleplayer() && SemiFunc.IsMultiplayer())
+            if (SemiFunc.IsMasterClientOrSingleplayer())
             {
-                var photonView = PhotonViewField?.GetValue(__instance) ?? null;
-                photonView?.RPC("SyncConfigIntRPC", RpcTarget.All, propertyName, value);
+                if (SemiFunc.IsMultiplayer())
+                {
+                    var photonView = PhotonViewField?.GetValue(__instance) ?? null;
+                    photonView?.RPC("SyncConfigIntRPC", RpcTarget.All, propertyName, value);
+                }
+                else SyncConfigIntRPC(__instance, propertyName, value);
             }
         }
 
@@ -108,10 +132,14 @@ namespace AdvancedREPO.Config.Patches
         [HarmonyPrefix]
         public static void SyncConfigUInt(PunManager __instance, string propertyName, uint value)
         {
-            if (SemiFunc.IsMasterClientOrSingleplayer() && SemiFunc.IsMultiplayer())
+            if (SemiFunc.IsMasterClientOrSingleplayer())
             {
-                var photonView = PhotonViewField?.GetValue(__instance) ?? null;
-                photonView?.RPC("SyncConfigUIntRPC", RpcTarget.All, propertyName, value);
+                if (SemiFunc.IsMultiplayer())
+                {
+                    var photonView = PhotonViewField?.GetValue(__instance) ?? null;
+                    photonView?.RPC("SyncConfigUIntRPC", RpcTarget.All, propertyName, value);
+                }
+                else SyncConfigUIntRPC(__instance, propertyName, value);
             }
         }
 
@@ -121,8 +149,12 @@ namespace AdvancedREPO.Config.Patches
         {
             if (SemiFunc.IsMasterClientOrSingleplayer() && SemiFunc.IsMultiplayer())
             {
-                var photonView = PhotonViewField?.GetValue(__instance) ?? null;
-                photonView?.RPC("SyncConfigLongRPC", RpcTarget.All, propertyName, value);
+                if (SemiFunc.IsMultiplayer())
+                {
+                    var photonView = PhotonViewField?.GetValue(__instance) ?? null;
+                    photonView?.RPC("SyncConfigLongRPC", RpcTarget.All, propertyName, value);
+                }
+                else SyncConfigLongRPC(__instance, propertyName, value);
             }
         }
 
@@ -130,10 +162,14 @@ namespace AdvancedREPO.Config.Patches
         [HarmonyPrefix]
         public static void SyncConfigULong(PunManager __instance, string propertyName, ulong value)
         {
-            if (SemiFunc.IsMasterClientOrSingleplayer() && SemiFunc.IsMultiplayer())
+            if (SemiFunc.IsMasterClientOrSingleplayer())
             {
-                var photonView = PhotonViewField?.GetValue(__instance) ?? null;
-                photonView?.RPC("SyncConfigULongRPC", RpcTarget.All, propertyName, value);
+                if (SemiFunc.IsMultiplayer())
+                {
+                    var photonView = PhotonViewField?.GetValue(__instance) ?? null;
+                    photonView?.RPC("SyncConfigULongRPC", RpcTarget.All, propertyName, value);
+                }
+                else SyncConfigULongRPC(__instance, propertyName, value);
             }
         }
 
@@ -141,10 +177,14 @@ namespace AdvancedREPO.Config.Patches
         [HarmonyPrefix]
         public static void SyncConfigFloat(PunManager __instance, string propertyName, float value)
         {
-            if (SemiFunc.IsMasterClientOrSingleplayer() && SemiFunc.IsMultiplayer())
+            if (SemiFunc.IsMasterClientOrSingleplayer())
             {
-                var photonView = PhotonViewField?.GetValue(__instance) ?? null;
-                photonView?.RPC("SyncConfigFloatRPC", RpcTarget.All, propertyName, value);
+                if (SemiFunc.IsMultiplayer())
+                {
+                    var photonView = PhotonViewField?.GetValue(__instance) ?? null;
+                    photonView?.RPC("SyncConfigFloatRPC", RpcTarget.All, propertyName, value);
+                }
+                else SyncConfigFloatRPC(__instance, propertyName, value);
             }
         }
 
@@ -152,10 +192,14 @@ namespace AdvancedREPO.Config.Patches
         [HarmonyPrefix]
         public static void SyncConfigDouble(PunManager __instance, string propertyName, double value)
         {
-            if (SemiFunc.IsMasterClientOrSingleplayer() && SemiFunc.IsMultiplayer())
+            if (SemiFunc.IsMasterClientOrSingleplayer())
             {
-                var photonView = PhotonViewField?.GetValue(__instance) ?? null;
-                photonView?.RPC("SyncConfigDoubleRPC", RpcTarget.All, propertyName, value);
+                if (SemiFunc.IsMultiplayer())
+                {
+                    var photonView = PhotonViewField?.GetValue(__instance) ?? null;
+                    photonView?.RPC("SyncConfigDoubleRPC", RpcTarget.All, propertyName, value);
+                }
+                else SyncConfigDoubleRPC(__instance, propertyName, value);
             }
         }
 
@@ -165,8 +209,12 @@ namespace AdvancedREPO.Config.Patches
         {
             if (SemiFunc.IsMasterClientOrSingleplayer() && SemiFunc.IsMultiplayer())
             {
-                var photonView = PhotonViewField?.GetValue(__instance) ?? null;
-                photonView?.RPC("SyncConfigStringRPC", RpcTarget.All, propertyName, value);
+                if (SemiFunc.IsMultiplayer())
+                {
+                    var photonView = PhotonViewField?.GetValue(__instance) ?? null;
+                    photonView?.RPC("SyncConfigStringRPC", RpcTarget.All, propertyName, value);
+                }
+                else SyncConfigStringRPC(__instance, propertyName, value);
             }
         }
 
@@ -260,14 +308,7 @@ namespace AdvancedREPO.Config.Patches
         {
             if (!SemiFunc.IsMultiplayer() || PhotonNetwork.IsMasterClient)
             {
-                Plugin.Log?.LogInfo("Applying local configuration to runtime.");
-                Sync.ApplyLocal();
-            }
-
-            if (SemiFunc.IsMultiplayer() && PhotonNetwork.IsMasterClient)
-            {
                 Plugin.Log?.LogInfo("Synchronizing configuration with clients...");
-                var types = new Type[] { typeof(float), typeof(bool) };
                 foreach (var config in Sync.Configs)
                 {
                     config.Value.SyncWithClients();

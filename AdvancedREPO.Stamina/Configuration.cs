@@ -58,7 +58,7 @@ namespace AdvancedREPO.Stamina
             
             StaminaRechargeStandingRate = configFile.Bind<int>(new ConfigDefinition("Stamina", "Stamina recharge multiplier while standing"), 150, new ConfigDescription("How fast should stamina recharge while standing still? 100 is the game default.", new AcceptableValueRange<int>(0, 1000))).Sync();
             API.Stamina.SetStandingStaminaRechargeMultiplier(StaminaRechargeStandingRate.Value / 100f);
-            StaminaRechargeStandingRate.ValueChanged += (s, e) => { API.Stamina.SetStaminaRechargeRate(StaminaRechargeStandingRate.Value / 100f); };
+            StaminaRechargeStandingRate.ValueChanged += (s, e) => { API.Stamina.SetStandingStaminaRechargeMultiplier(StaminaRechargeStandingRate.Value / 100f); };
             
             StaminaRechargeCrouchingRate = configFile.Bind<int>(new ConfigDefinition("Stamina", "Stamina recharge multiplier while crouching"), 150, new ConfigDescription("How fast should stamina recharge while crouching? 100 is the game default.", new AcceptableValueRange<int>(0, 1000))).Sync();
             API.Stamina.SetCrouchingStaminaRechargeMultiplier(StaminaRechargeCrouchingRate.Value / 100f);
